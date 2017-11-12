@@ -15,11 +15,11 @@ public class FileHandler {
     // BE CALLED ANYTIME WITHOUT PRIOR INITIALIZATION
     
     // file path
-    private static final String PATH = "volunteers.txt";
-    // to avoid displaying "error file not found" error message every time a new community group is created
+    private static final String PATH = "entities.txt";
+    // to avoid displaying "error file not found" error message every time a new group is created
     private static boolean fileErrorAlreadyPrinted = false;
     
-    public static void saveGroupVolunteers(ArrayList<CommunityGroup> myGroups) {
+    public static void saveGroupEntities(ArrayList<Group> myGroups) {
         // create a new File Object given its path
         File file = new File(PATH);
         
@@ -30,12 +30,12 @@ public class FileHandler {
             // the file (continueWriting == false) or after the last line (continueWriting == true)
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             
-            // each Volunteer is written to file as  "skillSet,", then a new line is made for the following group
+            // each Entity is written to file as  "attributeSet,", then a new line is made for the following group
             for (int i = 0; i < 5; i++) {
-                ArrayList<Volunteer> myVols = myGroups.get(i).getVolunteers();
+                ArrayList<Entity> myEntities = myGroups.get(i).getEntities();
                 int j=0;
-                while (j < myVols.size()) {
-                    bw.write(myVols.get(j).getSkillSet()+" ");
+                while (j < myEntities.size()) {
+                    bw.write(myEntities.get(j).getAttributeSet()+" ");
                     j++;
                 }
                 
@@ -44,7 +44,7 @@ public class FileHandler {
                     bw.newLine();
                 
                 // success message for each group
-                System.out.println(j+" volunteers from group "+myGroups.get(i).getName()+" saved onto file");
+                System.out.println(j+" entities from group "+myGroups.get(i).getName()+" saved onto file");
             }
             
             bw.flush();
@@ -56,13 +56,13 @@ public class FileHandler {
         }
     }
     
-    public static ArrayList<Volunteer> loadVolunteers(char group) {
+    public static ArrayList<Entity> loadEntities(char group) {
         // create a new File Object given its path
         File file = new File(PATH);
         
-        // savedVols is an ArrayList of Volunteers that, at the end of the method,
-        // will contain all the Volunteers in the given CommunityGroup ('group')
-        ArrayList<Volunteer> savedVols = new ArrayList<>();
+        // savedEntities is an ArrayList of Entities that, at the end of the method,
+        // will contain all the Entities in the given Group ('group')
+        ArrayList<Entity> savedEntities = new ArrayList<>();
         String line;
 
         try {
@@ -74,25 +74,25 @@ public class FileHandler {
             while ((line = br.readLine()) != null) {
                 if (i == group - 'A') {
                     if (!line.isEmpty()) {
-                    String[] skillSets = line.split(" ");
+                    String[] attributeSets = line.split(" ");
                      
-                    for (int j=0; j<skillSets.length; j++)
-                        savedVols.add(new Volunteer(skillSets[j]));
+                    for (int j=0; j<attributeSets.length; j++)
+                        savedEntities.add(new Entity(attributeSets[j]));
                     } 
                 }
                 i++;   
             }
         } catch (FileNotFoundException FnFe) {
             if (!fileErrorAlreadyPrinted)
-                System.out.println("File not found. No volunteers will be loaded.\n");
+                System.out.println("File not found. No entities will be loaded.\n");
             fileErrorAlreadyPrinted = true;
                 //FnFe.printStackTrace();
         } catch (IOException IOe) {
             System.out.println("Error reading the file");
                 //IOe.printStackTrace();
         }
-        // returned the created ArrayList of Volunteers to be assigned to the
-        // myVolunteers ArrayList in the given 'group'
-        return savedVols;
+        // returned the created ArrayList of Entities to be assigned to the
+        // myEntities ArrayList in the given 'group'
+        return savedEntities;
     }
 }
